@@ -6,13 +6,13 @@
 /*   By: abdel-ma <abdel-ma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 21:30:50 by abdel-ma          #+#    #+#             */
-/*   Updated: 2024/05/17 01:01:34 by abdel-ma         ###   ########.fr       */
+/*   Updated: 2024/06/28 17:16:55 by abdel-ma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*set_line(char *line_buff)
+static char	*set_line(char *line_buff)
 {
 	char		*rest;
 	ssize_t		i;
@@ -32,7 +32,7 @@ char	*set_line(char *line_buff)
 	return (rest);
 }
 
- char	*read_line(int fd, char *rest, char *buff)
+static char	*read_line(int fd, char *rest, char *buff)
 {
 	ssize_t	read_buff;
 	char	*tmp;

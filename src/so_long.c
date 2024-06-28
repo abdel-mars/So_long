@@ -5,99 +5,63 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abdel-ma <abdel-ma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/17 01:24:41 by abdel-ma          #+#    #+#             */
-/*   Updated: 2024/05/17 01:24:42 by abdel-ma         ###   ########.fr       */
+/*   Created: 2024/06/28 14:10:42 by abdel-ma          #+#    #+#             */
+/*   Updated: 2024/06/28 16:59:32 by abdel-ma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
-
-int handle_input(int keysym, t_data *data)
+static void	start_map(t_game *game)
 {
-    if (keysym == XK_Escape)
-    {
-        printf("the %d key (ESC) has been pressd \n\n", keysym);
-        mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-        mlx_destroy_display(data->mlx_ptr);
-        free(data->mlx_ptr);
-        exit(1);
-    }
-    printf("the %d key has been pressed\n\n", keysym);
-    return (0);
-
+	game->player_x = 0;
+	game->player_y = 0;
+	game->player_on_box = 0;
+	game->exit = 0;
+	game->player = 0;
+	game->line = 0;
+	game->col = 0;
+	game->end_game = 0;
+	game->move = 1;
 }
 
-
-int main(int argc, char **argv)
+void	start_game(t_game *game)
 {
-    if (argc != 2)
-    {
-        fprintf(stderr, "Usage: %s map_file.ber\n", argv[0]);
-        return 1;
-    }
+	game->mlx = mlx_init();
+	game->win = mlx_new_window(game->mlx, game->col * 64,
+			game->line * 64, "So_long");
+	mlx_hook(game->win, 02, 1L, key_handler, game);
+	mlx_hook(game->win, 17, 1L << 17, close_window, game);
+	put_images(game);
+	render_img(game);
+	mlx_loop(game->mlx);
+}
 
-    t_data data;
-    int width, height;
+int	main(int argc, char **argv)
+{
+	t_game	game;
+	int		fd;
+	int		fd_x;
+	int		fd_y;
+	int		fd_map;
 
-    data.mlx_ptr = mlx_init();
-    if (!data.mlx_ptr)
-        return (free(data.mlx_ptr), 1);
-
-    // Read the map
-    data.map = read_map(argv[1], &width, &height);
-    if (!data.map)
-    {
-        fprintf(stderr, "Error reading map\n");
-        return 1;
-    }
-    data.map_width = width;
-    data.map_height = height;
-
-    data.win_ptr = mlx_new_window(data.mlx_ptr, data.map_width * 64, data.map_height * 64, "So_long");
-    if (!data.win_ptr)
-    {
-        mlx_destroy_display(data.mlx_ptr);
-        free(data.mlx_ptr);
-        return (1);
-    }
-
-    data.img_wall = mlx_xpm_file_to_image(data.mlx_ptr, "path/to/wall.xpm", &data.img_width, &data.img_height);
-    data.img_floor = mlx_xpm_file_to_image(data.mlx_ptr, "path/to/floor.xpm", &data.img_width, &data.img_height);
-    data.img_collectible = mlx_xpm_file_to_image(data.mlx_ptr, "path/to/collectible.xpm", &data.img_width, &data.img_height);
-    data.img_player = mlx_xpm_file_to_image(data.mlx_ptr, "path/to/player.xpm", &data.img_width, &data.img_height);
-    data.img_exit = mlx_xpm_file_to_image(data.mlx_ptr, "path/to/exit.xpm", &data.img_width, &data.img_height);
-
-    if (!data.img_wall || !data.img_floor || !data.img_collectible || !data.img_player || !data.img_exit)
-    {
-        if (data.img_wall) mlx_destroy_image(data.mlx_ptr, data.img_wall);
-        if (data.img_floor) mlx_destroy_image(data.mlx_ptr, data.img_floor);
-        if (data.img_collectible) mlx_destroy_image(data.mlx_ptr, data.img_collectible);
-        if (data.img_player) mlx_destroy_image(data.mlx_ptr, data.img_player);
-        if (data.img_exit) mlx_destroy_image(data.mlx_ptr, data.img_exit);
-        mlx_destroy_window(data.mlx_ptr, data.win_ptr);
-        mlx_destroy_display(data.mlx_ptr);
-        free(data.mlx_ptr);
-        return (1);
-    }
-
-    mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_input, &data);
-
-    render_map(&data);
-
-    mlx_loop(data.mlx_ptr);
-
-    for (int i = 0; i < data.map_height; i++)
-        free(data.map[i]);
-    free(data.map);
-    mlx_destroy_image(data.mlx_ptr, data.img_wall);
-    mlx_destroy_image(data.mlx_ptr, data.img_floor);
-    mlx_destroy_image(data.mlx_ptr, data.img_collectible);
-    mlx_destroy_image(data.mlx_ptr, data.img_player);
-    mlx_destroy_image(data.mlx_ptr, data.img_exit);
-    mlx_destroy_window(data.mlx_ptr, data.win_ptr);
-    mlx_destroy_display(data.mlx_ptr);
-    free(data.mlx_ptr);
-
-    return 0;
+	fd_x = open(argv[1], O_RDONLY);
+	fd_y = open(argv[1], O_RDONLY);
+	fd_map = open(argv[1], O_RDONLY);
+	check_args(&game, argc, argv);
+	start_map(&game);
+	game.score = collectible_counter(&game);
+	game.line = get_line_size(&game, fd_y);
+	game.col = get_col_size(&game, fd_x);
+	fd = open(argv[1], O_RDONLY);
+	get_maps(&game, fd);
+	start_validations(&game, fd_map);
+	if (game.col == -1)
+		ft_exit("Error\n", &game);
+	close(fd_x);
+	close(fd_y);
+	close(fd);
+	close(fd_map);
+	player_position(&game);
+	start_game(&game);
 }

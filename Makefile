@@ -5,53 +5,48 @@
 #                                                     +:+ +:+         +:+      #
 #    By: abdel-ma <abdel-ma@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/05/16 21:30:56 by abdel-ma          #+#    #+#              #
-#    Updated: 2024/05/17 02:03:07 by abdel-ma         ###   ########.fr        #
+#    Created: 2024/06/28 14:03:46 by abdel-ma          #+#    #+#              #
+#    Updated: 2024/06/28 15:48:20 by abdel-ma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	so_long
-CC			=	gcc
-FLAGS		=	-Wall -Wextra -Werror
-MLX			=	mlx/Makefile.gen
-LBFT			=	libft/libft.aS
-INC			=	-I ./inc -I ./libft -I ./mlx
-LIB			=	-L ./libft -lft -L ./mlx -lmlx -lXext -lX11 -lm -lbsd
-OBJ			=	$(patsubst src%, obj%, $(SRC:.c=.o))
-SRC			=	so_long.c \
-				map_handler.c \
+NAME = so_long
+CC = cc
+FLAGS = -Wall -Werror -Wextra -g
+MLXFLAGS = -L ./minilibx -lmlx -Ilmlx -lXext -lX11
+LIBFT = ./libft/libft.a
+LIBFTDIR = ./libft
+MINILIBX_PATH = ./minilibx
+MINILIBX = $(MINILIBX_PATH)/libmlx.a
 
-all:		$(MLX) $(LBFT) obj $(NAME)
+SRC =	src/so_long.c \
+	src/game_end.c \
+	src/map_init.c \
+	src/moves.c \
+	src/validate_path.c \
+	src/validate_game.c \
+	src/render_img.c \
+	src/map_size.c \
 
-$(NAME):	$(OBJ)
-			$(CC) $(FLAGS) -fsanitize=address -o $@ $^ $(LIB)
+OBJ = $(SRC:%.c=%.o)
 
-$(MLX):
-			@echo " [ .. ] | Compiling minilibx.."
-			@make -s -C mlx
-			@echo " [ OK ] | Minilibx ready!"
+all: $(NAME)
 
-$(LBFT):		
-			@echo " [ .. ] | Compiling libft.."
-			@make -s -C libft
-			@echo " [ OK ] | Libft ready!"
-
-obj:
-			@mkdir -p obj
-
-obj/%.o:	src/%.c
-			$(CC) $(FLAGS) $(INC) -o $@ -c $<
-
+$(NAME): $(OBJ)
+	$(MAKE) -C $(MINILIBX_PATH)
+	$(MAKE) -C $(LIBFTDIR)
+	$(CC) $(FLAGS) -lm $(SRC) $(MLXFLAGS) $(LIBFT) -o $(NAME)
+	@echo "[Success] ./so_long created."
 clean:
-			@make -s $@ -C libft
-			@rm -rf $(OBJ) obj
-			@echo "object files removed."
+	$(MAKE) clean -C $(LIBFTDIR)
+	rm -rf $(OBJ)
+	@echo "[Deleting] object files deleted."
 
-fclean:		clean
-			@make -s $@ -C libft
-			@rm -rf $(NAME)
-			@echo "binary file removed."
+fclean: clean
+	$(MAKE) fclean -C $(LIBFTDIR)
+	rm -rf $(NAME) $(OBJ)
+	@echo "[Deleting] .a deleted."
 
-re:			fclean all
+re: fclean all
 
-.PHONY:		all clean fclean re
+.PHONY: all clean fclean re

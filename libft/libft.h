@@ -6,7 +6,7 @@
 /*   By: abdel-ma <abdel-ma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 03:18:35 by abdel-ma          #+#    #+#             */
-/*   Updated: 2024/05/17 01:12:11 by abdel-ma         ###   ########.fr       */
+/*   Updated: 2024/06/28 17:18:40 by abdel-ma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ char	*ft_sub(char *s, unsigned int start, size_t len);
 char	*ft_chr(const char *str, int c);
 char	*ft_join(char *s1, char *s2);
 char	*get_next_line(int fd);
-char	*read_line(int fd, char *rest, char *buff);
-char	*set_line(char *line_buff);
+// char	*read_line(int fd, char *rest, char *buff);
+// char	*set_line(char *line_buff);
 
 /*.....................print_f..................*/
 
@@ -88,8 +88,5 @@ void	ft_hex(unsigned int n, char x, int *len);
 void	ft_check(va_list list, char format, int *len);
 void	ft_ptr(unsigned long n, int *len);
 void	ft_printadress(unsigned long n, int *len);
-
-
-
 
 #endif
