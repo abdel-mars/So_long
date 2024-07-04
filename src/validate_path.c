@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_path.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abdel-ma <abdel-ma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/28 14:15:23 by abdel-ma          #+#    #+#             */
+/*   Updated: 2024/07/04 22:14:51 by abdel-ma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../so_long.h"
 
@@ -10,8 +21,13 @@ void	map_malloc_path(t_game *game, int fd)
 	i = 0;
 	y = game->line + 1;
 	game->map_floodfill = (char **)malloc(sizeof(char *) * y);
-	if (!game->map_floodfill)
+	if (!(game->map_floodfill))
+	{
+		free(game->map_floodfill);
 		free_img(game);
+		ft_printf("Error\nInvalid path on the map!\n");
+		free_map(game);
+	}
 	while (i < y)
 	{
 		c = get_next_line(fd);
@@ -61,11 +77,11 @@ int	floodfill(t_game *game)
 void	valid_path(t_game *game, int fd)
 {
 	map_malloc_path(game, fd);
-	if (!floodfill(game)) 
+	if (!floodfill(game))
 	{
-        ft_exit("Error\nInvalid path on the map\n", game); /////////////
-        free_img(game); //////////////
-        close(fd);///////////////
-    }
+		ft_exit("Error\nInvalid path on the map\n", game);
+		free_img(game);
+		close(fd);
+	}
 	free_map_floodfill(game);
 }

@@ -1,11 +1,22 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: abdel-ma <abdel-ma@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/06/28 14:03:46 by abdel-ma          #+#    #+#              #
+#    Updated: 2024/07/04 22:20:46 by abdel-ma         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 NAME = so_long
 CC = cc
-FLAGS = -Wall -Werror -Wextra 
+FLAGS = -Wall -Werror -Wextra
 MLXFLAGS = -L ./minilibx -lmlx -Ilmlx -lXext -lX11
 LIBFT = ./libft/libft.a
 LIBFTDIR = ./libft
-MINILIBX_PATH = ./minilibx
+MINILIBX_PATH = ./minilibx-linux
 MINILIBX = $(MINILIBX_PATH)/libmlx.a
 
 SRC =	src/so_long.c \

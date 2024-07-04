@@ -1,19 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_game.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abdel-ma <abdel-ma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/28 14:16:34 by abdel-ma          #+#    #+#             */
+/*   Updated: 2024/07/04 21:20:31 by abdel-ma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../so_long.h"
 
 void	check_args(t_game *game, int argc, char **argv)
 {
-	// if (argc == 1)
-	// {
-	// 	ft_exit("Error\nInvalid map", game);
-	// 	exit(0);
-	// }
-		// ft_exit("Error\nInvalid map", game);
-		// exit(0);
-
 	if (argc != 2)
 	{
-		ft_exit("Error\nInvalid number of argument\n", game);
+		(void)game;
+		ft_printf("Error\nInvalid number of argument\n");
 		exit(0);
 	}
 	if (ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".ber", 4))

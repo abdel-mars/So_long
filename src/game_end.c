@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game_end.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abdel-ma <abdel-ma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/28 14:05:00 by abdel-ma          #+#    #+#             */
+/*   Updated: 2024/07/04 22:14:24 by abdel-ma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../so_long.h"
 
 void	free_img(t_game *game)
 {
-	if (game->img.exit) //////////
-	mlx_destroy_image(game->mlx, game->img.exit);
+	if (game->img.exit)
+		mlx_destroy_image(game->mlx, game->img.exit);
 	if (game->img.collectible)
 		mlx_destroy_image(game->mlx, game->img.collectible);
 	if (game->img.player)
@@ -57,11 +68,11 @@ void	free_map_floodfill(t_game *game)
 
 int	close_window(t_game *game)
 {
-	if (game->win)  /////////
+	if (game->win)
 		mlx_destroy_window(game->mlx, game->win);
 	free_img(game);
 	free_map(game);
-	free (game->mlx); ///////////
+	free (game->mlx);
 	free (game);
 	exit (0);
 }

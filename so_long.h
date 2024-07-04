@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abdel-ma <abdel-ma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/28 13:17:24 by abdel-ma          #+#    #+#             */
+/*   Updated: 2024/06/28 22:15:45 by abdel-ma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef SO_LONG_H
 # define SO_LONG_H
@@ -15,7 +26,7 @@
 # define D 100
 # define ESC 65307
 
-# include "./minilibx/mlx.h"
+# include "./minilibx-linux/mlx.h"
 # include "libft/libft.h"
 
 # include <stdio.h>
@@ -73,10 +84,5 @@ void	free_map_floodfill(t_game *game);
 void	free_img(t_game *game);
 void	ft_exit(char *s, t_game *game);
 int		close_window(t_game *game);
-
-// Function declarations for reachability checks
-void check_player_reachability(t_game *game);
-void check_collectible_reachability(t_game *game);
-void check_exit_reachability(t_game *game);
 
 #endif
