@@ -13,9 +13,14 @@
 NAME = so_long
 CC = cc
 FLAGS = -Wall -Werror -Wextra
-MLXFLAGS = -L ./minilibx -lmlx -Ilmlx -lXext -lX11
+
+# Update the path to libmlx and add correct include paths for X11
+MLXFLAGS = -L./minilibx-linux -lmlx -lXext -lX11 -I./minilibx-linux
+
 LIBFT = ./libft/libft.a
 LIBFTDIR = ./libft
+
+# Correct path to MiniLibX library
 MINILIBX_PATH = ./minilibx-linux
 MINILIBX = $(MINILIBX_PATH)/libmlx.a
 
@@ -37,6 +42,7 @@ $(NAME): $(OBJ)
 	$(MAKE) -C $(LIBFTDIR)
 	$(CC) $(FLAGS) -lm $(SRC) $(MLXFLAGS) $(LIBFT) -o $(NAME)
 	@echo "[Success] ./so_long created."
+
 clean:
 	$(MAKE) clean -C $(LIBFTDIR)
 	rm -rf $(OBJ)
